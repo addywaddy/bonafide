@@ -67,7 +67,7 @@
 (defn validate-format [attr & {:as options}]
   (build-validation attr (or options {:message "Wrong format"})
                     (fn [content]
-                      (re-find #"ete" content)
+                      (clojure.string/blank? (re-find #"ete" content))
                       )
                     )
   )

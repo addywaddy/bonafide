@@ -7,7 +7,7 @@
 (defn validate-present [attr & {:as options}]
   (build-validation attr (or options {:message "Cannot be blank"})
                     (fn [content]
-                      (clojure.string/blank? content)
+                      (not (clojure.string/blank? content))
                       )
                     )
   )
@@ -15,7 +15,7 @@
 (defn validate-email [attr & {:as options}]
   (build-validation attr (or options {:message "Not a valid email address"})
                     (fn [content]
-                      (or (clojure.string/blank? content) (not (re-find #".+@.+\..+" content)))
+                      (and (not (clojure.string/blank? content)) (re-find #".+@.+\..+" content))
                       )
                     )
   )
@@ -23,12 +23,13 @@
 
 (defn build-validation [attr options condition]
   (partial (fn [attr options attrs]
-              (if (condition (attrs attr))
-                (merge-with merge-with-concat attrs {:errors {attr (options :message)}})
-                attrs
-                ))
+             (println (condition (attrs attr)) attr)
+             (if (condition (attrs attr))
+               attrs
+               (merge-with merge-with-concat attrs {:errors {attr (options :message)}})
+               ))
            attr options
-            )
+           )
   )
 
 
