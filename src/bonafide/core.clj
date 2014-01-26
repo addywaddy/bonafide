@@ -4,16 +4,16 @@
 (declare merge-with-concat)
 (declare build-validation)
 
-(defn validate-present [attr & {:keys [message] :or {message "Cannot be blank"}}]
-  (build-validation attr message
+(defn validate-present [attr & {:as options}]
+  (build-validation attr (or options {:message "Cannot be blank"})
                     (fn [content]
                       (clojure.string/blank? content)
                       )
                     )
   )
 
-(defn validate-email [attr & {:keys [message] :or {message "Not a valid email address"}}]
-  (build-validation attr message
+(defn validate-email [attr & {:as options}]
+  (build-validation attr (or options {:message "Not a valid email address"})
                     (fn [content]
                       (or (clojure.string/blank? content) (not (re-find #".+@.+\..+" content)))
                       )
@@ -21,13 +21,13 @@
   )
 
 
-(defn build-validation [attr message condition]
-  (partial (fn [attr message attrs]
+(defn build-validation [attr options condition]
+  (partial (fn [attr options attrs]
               (if (condition (attrs attr))
-                (merge-with merge-with-concat attrs {:errors {attr message}})
+                (merge-with merge-with-concat attrs {:errors {attr (options :message)}})
                 attrs
                 ))
-           attr message
+           attr options
             )
   )
 
