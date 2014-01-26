@@ -40,11 +40,11 @@ and then use our validation to validate a hashmap:
 
     =>
 
-    {email: "" :errors {:name "Cannot be blank"}}
+    {:email "" :errors {:name "Cannot be blank"}}
 
 ```
 
-We can then compose validations to check the presence of several keys:
+We can also compose validations to check the presence of several keys:
 
 ```clojure
 
@@ -56,7 +56,7 @@ We can then compose validations to check the presence of several keys:
 
     =>
 
-    {email: "" :errors {:email "Cannot be blank" :name "Cannot be blank"}}
+    {:email "" :errors {:email "Cannot be blank" :name "Cannot be blank"}}
 
 ```
 
