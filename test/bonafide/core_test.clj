@@ -62,3 +62,15 @@
       )
     )
   )
+
+(defn validate-format [attr]
+    (build-validation attr "Doesn't match"
+                      (fn [content]
+                        (println content)
+                        (re-matches #"ete" content))
+                      ))
+
+(deftest custom-validation
+  (testing "content matches expression"
+    (is (= (:errors ((validate-format :name) {:name "Peter"}) {:name ""}))))
+  )
