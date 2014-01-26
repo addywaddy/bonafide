@@ -66,13 +66,13 @@
 
 (defn validate-format [attr & {:as options}]
   (build-validation attr (or options {:message "Wrong format"})
-                    (fn [content]
-                      (clojure.string/blank? (re-find #"ete" content))
+                    (fn [content options]
+                      (clojure.string/blank? (re-find (options :match) content))
                       )
                     )
   )
 
 (deftest custom-validation
   (testing "content matches expression"
-    (is (= (:errors ((validate-format :name) {:name "Peter"}) nil)))
+    (is (= (:errors ((validate-format :name :match #"ete") {:name "Peter"}) nil)))
   ))
